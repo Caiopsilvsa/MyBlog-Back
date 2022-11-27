@@ -11,10 +11,12 @@ namespace MyBlog.Controllers
     public class PostController:BaseController
     {
         private readonly IPostInterface _postRepository;
+        private readonly IMapper _mapper;
 
-        public PostController(IPostInterface postRepository)
+        public PostController(IPostInterface postRepository, IMapper mapper )
         {
            _postRepository = postRepository;
+           _mapper = mapper; 
         }
 
         [HttpGet]
@@ -31,6 +33,33 @@ namespace MyBlog.Controllers
         {
             var post = await _postRepository.GetPostByName(authorName);
             return Ok(post);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<bool>> UpdatePost([FromBody] PostUpdateDto postUpdate)
+        {
+            var postMapped = _mapper.Map<Post>(postUpdate);
+
+            _postRepository.NewPost(postMapped);
+
+            if (await _postRepository.SaveChanges()) return NoContent();
+
+            return BadRequest("Failed to Create Post");
+        }
+
+        [HttpDelete("posts/{authorName}")]
+        public async Task<ActionResult<bool>> DeletePost(string authorName)
+        {
+
+            var testPost = await _postRepository.GetPostEntity(authorName);
+            
+            if (testPost == null) return NotFound();
+
+            _postRepository.DeletePost(testPost);
+
+            if(await _postRepository.SaveChanges()) return NoContent();
+
+            return BadRequest("Failed to Delete Post");
         }
     }
 }

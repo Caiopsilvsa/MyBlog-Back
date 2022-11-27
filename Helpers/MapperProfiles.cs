@@ -8,7 +8,8 @@ namespace MyBlog.Helpers
     {
         public MapperProfiles()
         {
-            CreateMap<Post, PostDto>();
+            CreateMap<Post, PostDto>().ReverseMap();
+            CreateMap<Post, PostUpdateDto>().ReverseMap();
         }
     }
 }
