@@ -35,8 +35,21 @@ namespace MyBlog.Controllers
             return Ok(post);
         }
 
+        [HttpPut()]
+        public async Task<ActionResult> UpdatePost([FromBody] PostUpdateDto postUpdate)
+        {
+            var postMapped = _mapper.Map<Post>(postUpdate);
+
+            var result = await _postRepository.GetPostEntity(postUpdate.Author);
+
+            if (await _postRepository.SaveChanges()) return NoContent();
+
+            return BadRequest("Não foi possivel atualizar");
+
+        }
+
         [HttpPost]
-        public async Task<ActionResult<bool>> UpdatePost([FromBody] PostUpdateDto postUpdate)
+        public async Task<ActionResult<bool>> CreatePost([FromBody] PostUpdateDto postUpdate)
         {
             var postMapped = _mapper.Map<Post>(postUpdate);
 
