@@ -17,7 +17,6 @@ namespace MyBlog.Repositories
             _dataContext = dataContext;
             _mapper = mapper;
         }
-
         
         public async Task<Post> GetPostById(int id)
         {
@@ -29,8 +28,15 @@ namespace MyBlog.Repositories
         public async Task<PostDto> GetPostByName(string authorName)
         {
             return await _dataContext.Posts
-                  .Where(p => p.Author == authorName)
+                  .Where(p => p.Titulo == authorName)
                   .ProjectTo<PostDto>(_mapper.ConfigurationProvider)
+                  .SingleOrDefaultAsync();
+        }
+
+        public async Task<Post> GetPostByTitleName(string authorName)
+        {
+            return await _dataContext.Posts
+                  .Where(p => p.Titulo == authorName)
                   .SingleOrDefaultAsync();
         }
 
@@ -38,12 +44,13 @@ namespace MyBlog.Repositories
         {
             return await _dataContext.Posts
                 .Where(P => P.Author == authorName)
-                .SingleAsync();
+                .SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<PostDto>> GetPosts()
         {
             return await _dataContext.Posts
+                .OrderByDescending(p => p.CreatedAt)
                 .ProjectTo<PostDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
@@ -61,6 +68,11 @@ namespace MyBlog.Repositories
         public async Task<bool> SaveChanges()
         {
             return await _dataContext.SaveChangesAsync() > 0;
+        }
+
+        public async void UpdatePost(Post post)
+        {
+            _dataContext.Update(post);
         }
     }
 }

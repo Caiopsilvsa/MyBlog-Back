@@ -28,20 +28,21 @@ namespace MyBlog.Controllers
            
         }
 
-        [HttpGet("posts/{authorName}")]
-        public async Task<ActionResult<IEnumerable<PostDto>>> GetPostByName(string authorName)
+        [HttpGet("posts/{titleName}")]
+        public async Task<ActionResult<IEnumerable<PostDto>>> GetPostByName(string titleName)
         {
-            var post = await _postRepository.GetPostByName(authorName);
+            var post = await _postRepository.GetPostByName(titleName.Trim().ToUpper());
             return Ok(post);
         }
 
-        [HttpPut()]
+        [HttpPut]
         public async Task<ActionResult> UpdatePost([FromBody] PostUpdateDto postUpdate)
         {
-            var postMapped = _mapper.Map<Post>(postUpdate);
-
-            var result = await _postRepository.GetPostEntity(postUpdate.Author);
-
+            var post = await _postRepository.GetPostByTitleName(postUpdate.Titulo);
+            
+            
+            _mapper.Map(postUpdate, post);
+            _postRepository.UpdatePost(post);
             if (await _postRepository.SaveChanges()) return NoContent();
 
             return BadRequest("Não foi possivel atualizar");
@@ -52,6 +53,9 @@ namespace MyBlog.Controllers
         public async Task<ActionResult<bool>> CreatePost([FromBody] PostUpdateDto postUpdate)
         {
             var postMapped = _mapper.Map<Post>(postUpdate);
+           
+            var testPost = await _postRepository.GetPostByName(postMapped.Titulo.Trim().ToUpper());
+            if (testPost != null) return BadRequest("Titulo já cadastrado");
 
             _postRepository.NewPost(postMapped);
 
@@ -65,7 +69,7 @@ namespace MyBlog.Controllers
         {
 
             var testPost = await _postRepository.GetPostEntity(authorName);
-            
+            //var testPost = await _postRepository.GetPostById(28);
             if (testPost == null) return NotFound();
 
             _postRepository.DeletePost(testPost);
