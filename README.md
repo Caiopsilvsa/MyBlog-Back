@@ -9,6 +9,7 @@
 
 ### Front-end
 - Angular 
+- TypeScript
 - HTML 
 - CSS 
 - BOOTSRAP
@@ -18,7 +19,9 @@
 - EntityFramework 
 - AutoMapper
 
-
-
+### Implantação em produção
+- Front end: Azure
+- Back end: Azure
+- Banco de dados: SqlServer
 
 
