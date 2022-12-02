@@ -8,15 +8,15 @@
 ## Tecnologias utilizadas:
 
 ### Front-end
-- [Angular] 
-- [HTML] 
-- [CSS] 
-- [BOOTSRAP]
+- Angular 
+- HTML 
+- CSS 
+- BOOTSRAP
 
 ### Back-end
-- [.NET 6.0] 
-- [EntityFramework] 
-- [AutoMapper]
+- .NET 6.0 
+- EntityFramework 
+- AutoMapper
 
 
 
