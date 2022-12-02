@@ -8,8 +8,8 @@
 
 # Tecnologias utilizadas:
 
-Front-end: TypeScript, HTML, CSS
-Back-end: .NET 6.0, SqlServer
-Deploy: Azure
+#### Front-end: TypeScript, HTML, CSS
+#### Back-end: .NET 6.0, SqlServer
+#### Deploy: Azure
 
 
