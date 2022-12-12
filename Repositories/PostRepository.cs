@@ -36,7 +36,7 @@ namespace MyBlog.Repositories
         public async Task<Post> GetPostByTitleName(string authorName)
         {
             return await _dataContext.Posts
-                  .Where(p => p.Titulo == authorName)
+                  .Where(p => p.Author == authorName)
                   .SingleOrDefaultAsync();
         }
 

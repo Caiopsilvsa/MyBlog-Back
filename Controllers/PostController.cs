@@ -38,9 +38,10 @@ namespace MyBlog.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdatePost([FromBody] PostUpdateDto postUpdate)
         {
-            var post = await _postRepository.GetPostByTitleName(postUpdate.Titulo);
-            
-            
+            var post = await _postRepository.GetPostByTitleName(postUpdate.Author.Trim());
+            var testPost = await _postRepository.GetPostByName(postUpdate.Titulo.Trim());
+            if (testPost != null) return BadRequest("Titulo já cadastrado");
+
             _mapper.Map(postUpdate, post);
             _postRepository.UpdatePost(post);
             if (await _postRepository.SaveChanges()) return NoContent();
